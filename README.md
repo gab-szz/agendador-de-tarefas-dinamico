@@ -24,6 +24,8 @@ Este projeto demonstra a construção de um **agendador de tarefas dinâmico** q
 
 O projeto é composto por três módulos principais:
 
+<img width="1848" height="689" alt="image" src="https://github.com/user-attachments/assets/35ea2432-c57a-471a-b996-11628f7a9431" />
+
 ### 1. **Configurador de Jobs** (`configurador-job`)
 
 - Gerencia as configurações de jobs no banco de dados
