@@ -1,98 +1,171 @@
+# 🚀 Agendador de Tarefas Dinâmico
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📋 Sobre o Projeto
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Projeto desenvolvido por conta própria com o objetivo de consolidar conhecimentos em **NestJS**, explorando as funcionalidades do framework além da criação tradicional de APIs REST.
 
-## Description
+Este projeto demonstra a construção de um **agendador de tarefas dinâmico** que executa jobs configuráveis de acordo com uma tabela de agendamentos armazenada em um banco de dados PostgreSQL.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🎯 Objetivos de Aprendizado
 
-## Project setup
+- Utilizar o **NestJS CLI** para estruturação modular
+- Implementar **agendamento dinâmico de tarefas** sem usar APIs REST
+- Trabalhar com **TypeORM** e PostgreSQL
+- Gerenciar **ciclo de vida de módulos** (OnModuleInit, OnApplicationShutdown)
+- Implementar **sistema de locks** para prevenir execuções concorrentes
+- Utilizar **padrões assíncronos** do Node.js com Promises e setTimeout recursivo
+- Integrar com APIs externas usando **@nestjs/axios**
+
+## 🏗️ Arquitetura
+
+O projeto é composto por três módulos principais:
+
+### 1. **Configurador de Jobs** (`configurador-job`)
+
+- Gerencia as configurações de jobs no banco de dados
+- Implementa sistema de **lock otimista** usando queries SQL
+- Métodos principais:
+  - `tentarBloquearJob()`: Adquire lock antes da execução
+  - `desbloquearJob()`: Libera lock após execução
+  - `buscarTodosJobs()`: Retorna todos os jobs configurados
+
+### 2. **Agendador** (`agendador`)
+
+- Cérebro do sistema que orquestra a execução dos jobs
+- Implementa **loop recursivo** com setTimeout
+- Gerencia **parada elegante** aguardando jobs em execução
+- Usa Map para rastrear:
+  - Jobs agendados (`jobsAgendadas`)
+  - Jobs em execução (`jobsEmExecucao`)
+
+### 3. **Coletor de Preço de Moeda** (`coletor-preco-moeda`)
+
+- Job de demonstração que coleta cotação USD-BRL
+- Integração com API externa (AwesomeAPI)
+- Demonstra execução assíncrona de tarefas
+
+## 🔧 Tecnologias Utilizadas
+
+- **NestJS** - Framework principal
+- **TypeScript** - Linguagem de programação
+- **TypeORM** - ORM para PostgreSQL
+- **PostgreSQL** - Banco de dados
+- **Axios** - Cliente HTTP
+- **Docker Compose** - Orquestração de containers
+
+## 📦 Pré-requisitos
+
+- Node.js (v18+)
+- Docker e Docker Compose
+- npm ou yarn
+
+## 🚀 Como Executar
+
+### 1. Clone o repositório
 
 ```bash
-$ npm install
+git clone https://github.com/gab-szz/dynamic-job-runner.git
+cd dynamic-job-runner
 ```
 
-## Compile and run the project
+### 2. Instale as dependências
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Inicie o banco de dados PostgreSQL
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker-compose up -d
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 4. Execute a aplicação
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Modo desenvolvimento
+npm run start:dev
+
+# Modo produção
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📊 Funcionamento
 
-## Resources
+1. **Inicialização**: Ao iniciar, o módulo `ConfiguracaoJobService` cria um job de exemplo no banco
+2. **Agendamento**: O `AgendamentoService` carrega os jobs e inicia loops recursivos
+3. **Execução**: A cada intervalo configurado:
+   - Tenta adquirir lock no banco de dados
+   - Se bem-sucedido, executa o job
+   - Libera o lock ao finalizar
+   - Agenda próxima execução
+4. **Shutdown**: Cancela próximas execuções e aguarda jobs em andamento
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🗄️ Estrutura do Banco de Dados
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Tabela `configuracao_job`:
 
-## Support
+- `job_name` (VARCHAR, PK) - Nome único do job
+- `interval_seconds` (INTEGER) - Intervalo de execução em segundos
+- `is_running` (BOOLEAN) - Flag de lock para execução
+- `last_run_start` (TIMESTAMP) - Timestamp da última execução
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 📝 Exemplo de Job
 
-## Stay in touch
+O job `currency-collector` coleta a cotação USD-BRL a cada 60 segundos:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```typescript
+{
+  job_name: 'currency-collector',
+  interval_seconds: 60,
+  is_running: false
+}
+```
 
-## License
+## 🔍 Logs
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+A aplicação fornece logs detalhados de:
+
+- Aquisição e liberação de locks
+- Início e fim de execuções
+- Erros durante processamento
+- Processo de shutdown
+
+## 🛠️ Comandos Úteis
+
+```bash
+# Desenvolvimento com watch mode
+npm run start:dev
+
+# Build para produção
+npm run build
+
+# Formatação de código
+npm run format
+
+# Linting
+npm run lint
+```
+
+## 🎓 Aprendizados
+
+Este projeto permitiu explorar:
+
+- Uso não-convencional do NestJS (sem controllers)
+- Gerenciamento de estado com locks em banco de dados
+- Padrões de concorrência e execução assíncrona
+- Ciclo de vida de aplicações NestJS
+- Integração com APIs externas
+
+## 📄 Licença
+
+Este projeto é de uso educacional e está sob licença UNLICENSED.
+
+## 👤 Autor
+
+Desenvolvido como projeto de estudo pessoal para consolidação de conhecimentos em NestJS.
