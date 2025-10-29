@@ -1,6 +1,6 @@
 // src/currency-collector/currency-collector.module.ts
 import { Module } from '@nestjs/common';
-import { CurrencyCollectorService } from './currency-collector.service';
+import { ColetorPrecoMoedaService } from './coletor.service';
 import { HttpModule } from '@nestjs/axios'; // Importe o HttpModule
 
 @Module({
@@ -11,7 +11,7 @@ import { HttpModule } from '@nestjs/axios'; // Importe o HttpModule
       maxRedirects: 5,
     }),
   ],
-  providers: [CurrencyCollectorService],
-  exports: [CurrencyCollectorService], // Vamos exportar para o Scheduler usar
+  providers: [ColetorPrecoMoedaService],
+  exports: [ColetorPrecoMoedaService], // Vamos exportar para o Scheduler usar
 })
-export class CurrencyCollectorModule {}
+export class ColetorPrecoMoedaModule {}

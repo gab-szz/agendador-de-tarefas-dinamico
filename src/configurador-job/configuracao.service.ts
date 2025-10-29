@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfiguracaoJob } from './job-config.entity';
+import { ConfiguracaoJob } from './configuracao.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

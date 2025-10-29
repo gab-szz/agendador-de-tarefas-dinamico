@@ -1,8 +1,8 @@
 // src/job-config/job-config.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfiguracaoJob } from './job-config.entity';
-import { ConfiguracaoJobService } from './job-config.service';
+import { ConfiguracaoJob } from './configuracao.entity';
+import { ConfiguracaoJobService } from './configuracao.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ConfiguracaoJob])], // Importa a entidade

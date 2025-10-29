@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
-export interface AwesomeApiData {
+export interface DadosAPI {
   USDBRL: {
     code: string;
     codein: string;
@@ -18,19 +18,19 @@ export interface AwesomeApiData {
 }
 
 @Injectable()
-export class CurrencyCollectorService {
-  private readonly logger = new Logger(CurrencyCollectorService.name);
+export class ColetorPrecoMoedaService {
+  private readonly logger = new Logger(ColetorPrecoMoedaService.name);
 
   private readonly apiUrl = 'https://economia.awesomeapi.com.br/last/USD-BRL';
 
   constructor(private readonly httpService: HttpService) {}
 
-  async collectAndLog(): Promise<void> {
+  async coletarInformacoes(): Promise<void> {
     this.logger.log('Iniciando coleta de dados de câmbio (USD-BRL)...');
     try {
       // O httpService.get() retorna um Observable, usamos firstValueFrom para convertê-lo em Promise
       const response = await firstValueFrom(
-        this.httpService.get<AwesomeApiData>(this.apiUrl),
+        this.httpService.get<DadosAPI>(this.apiUrl),
       );
 
       // Usamos parseFloat para garantir que a 'rate' seja numérica se for salvar.
